@@ -24,7 +24,11 @@ module ActiveRecord
       end
 
       def klass
-        @klass ||= active_record.send(:compute_type, options[:class_name] || name.to_s.sub(/_count\z/, '').singularize.classify)
+        @klass ||= if options[:class_name].is_a?(Class)
+          options[:class_name]
+        else
+          active_record.send(:compute_type, options[:class_name] || name.to_s.sub(/_count\z/, '').singularize.classify)
+        end
       end
     end
   end
